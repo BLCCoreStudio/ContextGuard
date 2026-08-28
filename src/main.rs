@@ -66,10 +66,7 @@ fn redact_prefixed_token(input: &str, prefix: &str, minimum_len: usize) -> (Stri
     let mut cursor = 0;
     let mut count = 0;
 
-    loop {
-        let Some(relative) = output[cursor..].find(prefix) else {
-            break;
-        };
+    while let Some(relative) = output[cursor..].find(prefix) {
         let start = cursor + relative;
         let mut end = start;
         for (offset, ch) in output[start..].char_indices() {
@@ -97,10 +94,7 @@ fn redact_home_paths(input: &str, prefix: &str) -> (String, usize) {
     let mut cursor = 0;
     let mut count = 0;
 
-    loop {
-        let Some(relative) = output[cursor..].find(prefix) else {
-            break;
-        };
+    while let Some(relative) = output[cursor..].find(prefix) {
         let start = cursor + relative;
         let user_start = start + prefix.len();
         let Some(relative_end) = output[user_start..].find('/') else {
