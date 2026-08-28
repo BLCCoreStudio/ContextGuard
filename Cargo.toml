@@ -1,0 +1,11 @@
+[package]
+name = "contextguard"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.74"
+license = "MIT"
+description = "Redact secrets and sensitive project context before sharing files with AI tools."
+repository = "https://github.com/BLCCoreStudio/ContextGuard"
+publish = false
+
+[dependencies]
