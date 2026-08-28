@@ -7,7 +7,9 @@ use std::{
 const REDACTED: &str = "[REDACTED]";
 
 fn is_sensitive_key(key: &str) -> bool {
-    let trimmed = key.trim().trim_matches(['"', '\'']);
+    let trimmed = key
+        .trim()
+        .trim_matches(|ch| matches!(ch, '"' | '\''));
     let candidate = trimmed.strip_prefix("export ").unwrap_or(trimmed);
     let normalized: String = candidate
         .chars()
@@ -149,7 +151,8 @@ fn redact_text(input: &str) -> (String, usize) {
             line.to_owned()
         };
 
-        for (prefix, minimum_len) in [("github_pat_", 20), ("ghp_", 20), ("sk-", 20), ("AKIA", 16)] {
+        for (prefix, minimum_len) in [("github_pat_", 20), ("ghp_", 20), ("sk-", 20), ("AKIA", 16)]
+        {
             let (next, count) = redact_prefixed_token(&current, prefix, minimum_len);
             current = next;
             findings += count;
@@ -253,7 +256,8 @@ mod tests {
 
     #[test]
     fn redacts_private_key_block() {
-        let input = "before\n-----BEGIN PRIVATE KEY-----\nsecret\n-----END PRIVATE KEY-----\nafter\n";
+        let input =
+            "before\n-----BEGIN PRIVATE KEY-----\nsecret\n-----END PRIVATE KEY-----\nafter\n";
         let (output, count) = redact_text(input);
         assert_eq!(output, "before\n[REDACTED PRIVATE KEY BLOCK]\nafter\n");
         assert_eq!(count, 1);
