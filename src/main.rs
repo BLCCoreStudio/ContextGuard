@@ -7,9 +7,7 @@ use std::{
 const REDACTED: &str = "[REDACTED]";
 
 fn is_sensitive_key(key: &str) -> bool {
-    let trimmed = key
-        .trim()
-        .trim_matches(|ch| matches!(ch, '"' | '\''));
+    let trimmed = key.trim().trim_matches(|ch| matches!(ch, '"' | '\''));
     let candidate = trimmed.strip_prefix("export ").unwrap_or(trimmed);
     let normalized: String = candidate
         .chars()
